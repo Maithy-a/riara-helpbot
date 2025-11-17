@@ -1,7 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import { dbConnection } from './utils/db.js';
+import { dbConnection } from './lib/db.js';
 
 import healthRouter from './routes/health.js';
 import chatRouter from './routes/chat.js';

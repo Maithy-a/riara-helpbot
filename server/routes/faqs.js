@@ -1,10 +1,12 @@
 import express from 'express';
+import { generateEmbedding } from '../services/huggingface.js';
+
 const router = express.Router();
 
 router.get('/', async (req, res) => {
     try {
         const db = req.app.locals.db;
-        const faqs = await db.collection('faqs').find({}).toArray(); // <-- FIXED
+        const faqs = await db.collection('faqs').find({}).toArray();
         res.json(faqs);
     } catch (error) {
         console.error("Error fetching FAQs:", error);
@@ -12,6 +14,7 @@ router.get('/', async (req, res) => {
     }
 });
 
+// post new faq with embedding
 router.post('/', async (req, res) => {
     try {
         const db = req.app.locals.db;
@@ -23,15 +26,20 @@ router.post('/', async (req, res) => {
             });
         }
 
+        // generate embedding
+        const embedding = await generateEmbedding(question);
+
         const now = new Date();
         const newFAQ = {
             question,
             answer,
             category,
+            embedding,
             createdAt: now,
             updatedAt: now
         };
 
+        // Insert into db
         const result = await db.collection('faqs').insertOne(newFAQ);
 
         res.json({ insertedId: result.insertedId });
