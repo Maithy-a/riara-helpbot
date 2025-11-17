@@ -1,5 +1,6 @@
 import express from 'express';
 import { generateEmbedding } from '../services/huggingface.js';
+import { verifyAdminToken } from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -15,7 +16,7 @@ router.get('/', async (req, res) => {
 });
 
 // post new faq with embedding
-router.post('/', async (req, res) => {
+router.post('/', verifyAdminToken, async (req, res) => {
     try {
         const db = req.app.locals.db;
         const { question, answer, category } = req.body;
