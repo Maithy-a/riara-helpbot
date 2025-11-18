@@ -81,4 +81,23 @@ router.post('/login', async (req, res) => {
 
 });
 
+router.get('/analytics', verifyAdminToken, async (req, res) => {
+    const db = req.app.locals.db;
+
+    const totalChats = await db.collection("chat_logs").countDocuments();
+
+    const topQuestions = await db.collection("chat_logs")
+        .aggregate([
+            { $group: { _id: "$faqId", count: { $sum: 1 } } },
+            { $sort: { count: -1 } },
+            { $limit: 5 }
+        ]).toArray();
+
+    res.json({
+        totalChats,
+        topFAQs: topQuestions
+    });
+});
+
+
 export default router;
