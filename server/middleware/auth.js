@@ -1,10 +1,12 @@
 import jwt from 'jsonwebtoken';
-const JWT_SECRET = process.env.JWT_SECRET;
 
 export function verifyAdminToken(req, res, next) {
+    
+    const JWT_SECRET = process.env.JWT_SECRET;
     const authHeader = req.headers.authorization;
+
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        return res.status(401).json({ message: 'Unauthorized' });
+        return res.status(401).json({ message: 'No token' });
     }
 
     const token = authHeader.split(' ')[1];
