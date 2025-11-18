@@ -1,69 +1,80 @@
-# Riara HelpBot – Backend API
+# 🚀 Riara HelpBot – Backend API
 
-A Node.js + Express backend powering an intelligent FAQ chatbot for Riara University, featuring embeddings-based search, admin authentication, FAQ management, and analytics.
+A **Node.js + Express** backend powering an intelligent FAQ chatbot for Riara University.  
+Features include **semantic search using embeddings**, **admin authentication**, **FAQ management**, and **chat analytics**.
 
-<div align="center"> 
-<img src="https://skillicons.dev/icons?i=nodejs,express,mongodb,js,github,postman" /> 
-<p align="center">
-TechStack
-</p>
+---
+
+<div align="center">
+  
+### 🛠️ Tech Stack
+
+<img src="https://skillicons.dev/icons?i=nodejs,express,mongodb,js,github,postman" />
+
 </div>
 
-## Features
+---
 
-### Admin System
+## ✨ Features
 
-- admin login (JWT Auth)
-- Protected Admin routes
-- Add / Update / Delete FAQs
+### 🔐 Admin System
 
-### Intelligent Chatbot
+- JWT Authentication
+- Protected Admin Routes
+- Create / Update / Delete FAQs
+- Create the first admin without authentication
 
-- Semantic Search `HuggingFace embeddings`
-- Cosine similarity ranking
+### 🤖 Intelligent Chatbot
+
+- Uses **HuggingFace sentence embeddings**
+- Cosine similarity matching
 - Confidence-based fallback responses
+- Fast & lightweight
 
-### Chat Analytics
+### 📊 Chat Analytics
 
-- Total chat count
-- Most Asked FAQs
-- Chat logging stored in `MongoDB`
+- Track total chats
+- Top 5 most frequently asked FAQs
+- Logs stored in MongoDB
 
-### System Health
+### ❤️ System Health
 
-- `/api/health` endpoint for server uptime monitoring
+- `/api/health` endpoint to verify server uptime
 
-## Project Structure
+---
+
+## 📁 Project Structure
 
 ```bash
 server/
 ├── lib/
 │   └── db.js              # Database connection
 ├── middleware/
-│   └── auth.js            # JWT middleware
+│   └── auth.js            # JWT protection
 ├── routes/
 │   ├── admin.js
 │   ├── chat.js
 │   ├── faqs.js
 │   └── health.js
 ├── services/
-│   └── huggingface.js     # Embeddings gen
+│   └── huggingface.js     # Embedding generator
 ├── server.js
 └── .env
 ```
 
+---
+
 ## Installation
 
-1. Install dependencies
+### Install dependencies
 
 ```bash
 npm install
 ```
 
-2. Create `.env` file
-   Your `.env` must contain:
+### Create `.env` file
 
-```bash
+```
 PORT=5000
 MONGO_URI="your_mongodb_url"
 MONGO_DB=riara-helpbot
@@ -72,57 +83,67 @@ MONGO_DB=riara-helpbot
 HF_TOKEN=hf_your_token
 HUGGINGFACE_MODEL=sentence-transformers/all-MiniLM-L6-v2
 
-# Admin
+# Admin Auth
 JWT_SECRET=
 ```
 
-3. Generate a JWT Secret
-   Run this in your terminal:
+### Generate JWT Secret
 
 ```bash
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ```
 
-Copy the output into JWT_SECRET=
+Paste it into `JWT_SECRET=`.
 
-4. Start your development server
+### 4️⃣ Start development server
 
 ```bash
 npm run dev
 ```
 
-## API Endpoints
+---
 
-### 🟢 Public Routes
+## 🌐 API Endpoints
 
-| Method | Endpoint            | Description         |
-| ------ | ------------------- | ------------------- |
-| GET    | `/api/health`       | Check server status |
-| POST   | `/api/admin/create` | Create first admin  |
-| POST   | `/api/admin/login`  | Login & receive JWT |
-| POST   | `/api/chat`         | Chat with the bot   |
+### 🟢 Public Endpoints
 
-### 🔒 Protected Admin Routes
+| Method | Endpoint            | Description           |
+| ------ | ------------------- | --------------------- |
+| GET    | `/api/health`       | Check API health      |
+| POST   | `/api/admin/create` | Create first admin    |
+| POST   | `/api/admin/login`  | Login & get JWT token |
+| POST   | `/api/chat`         | Chat with the bot     |
 
-(**_Requires Authorization header_**)
+---
+
+### 🔒 Protected Admin Endpoints
+
+**Requires:**  
+`Authorization: Bearer <token>`
 
 | Method | Endpoint               | Description         |
 | ------ | ---------------------- | ------------------- |
-| POST   | `/api/admin/register`  | Register new admin  |
+| POST   | `/api/admin/register`  | Create new admin    |
 | GET    | `/api/admin/analytics` | View chat analytics |
-| GET    | `/api/faqs`            | List all FAQs       |
+| GET    | `/api/faqs`            | Get all FAQs        |
 | POST   | `/api/faqs`            | Add FAQ             |
 | PUT    | `/api/faqs/:id`        | Update FAQ          |
 | DELETE | `/api/faqs/:id`        | Delete FAQ          |
 
-Use this Postman collection to test all endpoints easily:
+---
 
-**Postman Collection:**
-[Open Link](https://web.postman.co/workspace/My-Workspace~e1539efe-a7e1-4d9b-83f1-65c3c5d6bdab/collection/36348178-f654fef6-f253-45da-9281-54b4f7d0087e?action=share&source=copy-link&creator=36348178)
+## 🧪 Postman Collection
 
-## How to Authenticate (Postman)
+Use this collection to test all endpoints easily:
 
-1. Login using:
+**Postman Collection:**  
+[Open postman collection link](https://web.postman.co/workspace/My-Workspace~e1539efe-a7e1-4d9b-83f1-65c3c5d6bdab/collection/36348178-f654fef6-f253-45da-9281-54b4f7d0087e?action=share&source=copy-link&creator=36348178)
+
+---
+
+## 🔑 Authentication Guide (Postman)
+
+### 1. Login
 
 ```json
 POST /api/admin/login
@@ -132,19 +153,27 @@ POST /api/admin/login
 }
 ```
 
-2. Copy the token from response
+### 2. Copy JWT Token
 
-3. For protected routes add header:
+From the response:
+
+```json
+{ "token": "<your_jwt_token>" }
+```
+
+### 3. Add this header to protected routes:
 
 ```
 Authorization: Bearer <your_token>
 ```
 
-## Testing the Chatbot (Postman)
+---
+
+## 💬 Testing the Chatbot
 
 Send:
 
-```
+```http
 POST /api/chat
 ```
 
@@ -156,7 +185,7 @@ Body:
 }
 ```
 
-Response:
+Expected Response:
 
 ```json
 {
@@ -168,4 +197,9 @@ Response:
 }
 ```
 
-❤️ Happy coding!
+## 📄 License
+
+MIT License — free to modify and use.
+
+❤️ **Happy Coding!**  
+Feel free to extend the bot with more intelligence, better logs, or additional services.
