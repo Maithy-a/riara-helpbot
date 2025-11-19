@@ -5,19 +5,23 @@ import { verifyAdminToken } from '../middleware/auth.js';
 
 const router = express.Router();
 
-router.post('/register', verifyAdminToken, async (req, res) => {
+router.post('/create-admin', async (req, res) => {
     try {
         const db = req.app.locals.db;
+
+        const exist = await db.collection('admins').findOne({});
+        if (exist) {
+            return res.status(403).json({
+                message: 'Admin account already exists'
+            });
+        }
+
         const { username, password } = req.body;
 
         if (!username || !password) {
-            return res.status(400).json({ message: 'Username and password are required' });
-        }
-
-        const existingAdmin = await db.collection('admins')
-            .findOne({ username });
-        if (existingAdmin) {
-            return res.status(409).json({ message: 'Username already exists' });
+            return res.status(400).json({
+                message: 'Username and password are required'
+            });
         }
 
         const passwordHash = await bcrypt.hash(password, 10);
@@ -30,11 +34,13 @@ router.post('/register', verifyAdminToken, async (req, res) => {
 
         await db.collection('admins').insertOne(newAdmin);
 
-        res.status(201).json({ message: 'Admin registered successfully' });
+        return res.status(201).json({
+            message: 'Admin account created successfully'
+        });
 
     } catch (error) {
-        console.error("Error registering admin:", error);
-        res.status(500).json({ message: 'Internal server error' });
+        console.error("Error creating initial admin:", error);
+        return res.status(500).json({ message: 'Internal server error' });
     }
 });
 
@@ -81,12 +87,45 @@ router.post('/login', async (req, res) => {
 
 });
 
+router.post('/register', verifyAdminToken, async (req, res) => {
+    try {
+        const db = req.app.locals.db;
+        const { username, password } = req.body;
+
+        if (!username || !password) {
+            return res.status(400).json({ message: 'Username and password are required' });
+        }
+
+        const existingAdmin = await db.collection('admins')
+            .findOne({ username });
+        if (existingAdmin) {
+            return res.status(409).json({ message: 'Username already exists' });
+        }
+
+        const passwordHash = await bcrypt.hash(password, 10);
+
+        const newAdmin = {
+            username,
+            passwordHash,
+            createdAt: new Date()
+        };
+
+        await db.collection('admins').insertOne(newAdmin);
+
+        res.status(201).json({ message: 'Admin registered successfully' });
+
+    } catch (error) {
+        console.error("Error registering admin:", error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
 router.get('/analytics', verifyAdminToken, async (req, res) => {
     const db = req.app.locals.db;
 
-    const totalChats = await db.collection("chat_logs").countDocuments();
+    const totalChats = await db.collection("chatLogs").countDocuments();
 
-    const topQuestions = await db.collection("chat_logs")
+    const topQuestions = await db.collection("chatLogs")
         .aggregate([
             { $group: { _id: "$faqId", count: { $sum: 1 } } },
             { $sort: { count: -1 } },
@@ -98,6 +137,5 @@ router.get('/analytics', verifyAdminToken, async (req, res) => {
         topFAQs: topQuestions
     });
 });
-
 
 export default router;

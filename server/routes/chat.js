@@ -69,7 +69,7 @@ router.post('/', async (req, res) => {
             });
         }
 
-        await db.collection('logs').insertOne({
+        await db.collection('chatLogs').insertOne({
             question: message,
             answer: bestMatch.answer,
             similarity: highestSimilarity,
