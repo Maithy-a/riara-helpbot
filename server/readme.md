@@ -1,19 +1,17 @@
-# 🚀 Riara HelpBot – Backend API
+# Riara HelpBot – Backend API
 
 A **Node.js + Express** backend powering an intelligent FAQ chatbot for Riara University.  
 Features include **semantic search using embeddings**, **admin authentication**, **FAQ management**, and **chat analytics**.
 
----
 
 <div align="center">
   
-### 🛠️ Tech Stack
+### Tech Stack
 
 <img src="https://skillicons.dev/icons?i=nodejs,express,mongodb,js,github,postman" />
 
 </div>
 
----
 
 ## ✨ Features
 
@@ -41,7 +39,6 @@ Features include **semantic search using embeddings**, **admin authentication**,
 
 - `/api/health` endpoint to verify server uptime
 
----
 
 ## 📁 Project Structure
 
@@ -62,17 +59,17 @@ server/
 └── .env
 ```
 
----
+
 
 ## Installation
 
-### Install dependencies
+### 1. Install dependencies
 
 ```bash
 npm install
 ```
 
-### Create `.env` file
+### 2. Create `.env` file
 
 ```
 PORT=5000
@@ -87,7 +84,7 @@ HUGGINGFACE_MODEL=sentence-transformers/all-MiniLM-L6-v2
 JWT_SECRET=
 ```
 
-### Generate JWT Secret
+### 3. Generate JWT Secret
 
 ```bash
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
@@ -95,15 +92,15 @@ node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 
 Paste it into `JWT_SECRET=`.
 
-### 4️⃣ Start development server
+### 4️.  Start development server
 
 ```bash
 npm run dev
 ```
 
----
 
-## 🌐 API Endpoints
+
+##  API Endpoints
 
 ### 🟢 Public Endpoints
 
@@ -114,7 +111,7 @@ npm run dev
 | POST   | `/api/admin/login`  | Login & get JWT token |
 | POST   | `/api/chat`         | Chat with the bot     |
 
----
+
 
 ### 🔒 Protected Admin Endpoints
 
@@ -130,7 +127,7 @@ npm run dev
 | PUT    | `/api/faqs/:id`        | Update FAQ          |
 | DELETE | `/api/faqs/:id`        | Delete FAQ          |
 
----
+
 
 ## 🧪 Postman Collection
 
@@ -139,7 +136,7 @@ Use this collection to test all endpoints easily:
 **Postman Collection:**  
 [Open postman collection link](https://web.postman.co/workspace/My-Workspace~e1539efe-a7e1-4d9b-83f1-65c3c5d6bdab/collection/36348178-f654fef6-f253-45da-9281-54b4f7d0087e?action=share&source=copy-link&creator=36348178)
 
----
+
 
 ## 🔑 Authentication Guide (Postman)
 
@@ -167,7 +164,7 @@ From the response:
 Authorization: Bearer <your_token>
 ```
 
----
+
 
 ## 💬 Testing the Chatbot
 
